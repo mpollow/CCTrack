@@ -1,0 +1,8 @@
+{
+    "name": "frame_codec",
+    "version": "0.1.0",
+    "dependencies": [
+        { "name": "cobs" },
+        { "name": "crc16" }
+    ]
+}

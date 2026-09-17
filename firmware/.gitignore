@@ -1,0 +1,9 @@
+.pio/
+.pioenvs/
+.piolibdeps/
+.vscode/
+.clangd/
+compile_commands.json
+*.uf2
+*.bin
+*.elf

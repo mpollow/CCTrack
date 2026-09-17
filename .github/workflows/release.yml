@@ -1,0 +1,87 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Martin Pollow
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # tags are needed for the firmware version stamp
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install platformio
+
+      - name: Unit tests
+        run: pio test -e native
+        working-directory: firmware
+
+      - name: Build firmware
+        run: |
+          set -o pipefail
+          pio run -e qtpy_m0 | tee build.log
+        working-directory: firmware
+
+      - name: Check the stamped version matches the tag
+        working-directory: firmware
+        run: |
+          line=$(grep -m1 '\[firmware_version\]' build.log)
+          echo "$line"
+          expected="[firmware_version] ${GITHUB_REF_NAME#v} (${GITHUB_REF_NAME})"
+          if [ "$(echo "$line" | sed 's/^ *//')" != "$expected" ]; then
+            echo "::error::expected '$expected' — is the tag vMAJOR.MINOR.PATCH on a clean commit?"
+            exit 1
+          fi
+
+      - name: Assemble release assets
+        run: |
+          set -euo pipefail
+          tag="$GITHUB_REF_NAME"
+          lic="licenses/cctrack-${tag}-licenses"
+          mkdir -p dist "$lic/third-party-licenses"
+          cp firmware/.pio/build/qtpy_m0/firmware.uf2 "dist/cctrack-${tag}.uf2"
+
+          # Licence texts of everything compiled into the binary (see NOTICE).
+          for d in firmware/.pio/libdeps/qtpy_m0/*/; do
+            name=$(basename "$d" | tr ' ' '_')
+            for f in "$d"LICENSE* "$d"license* "$d"COPYING* "$d"NOTICE* "$d"src/NOTICE*; do
+              if [ -f "$f" ]; then cp "$f" "$lic/third-party-licenses/${name}-$(basename "$f")"; fi
+            done
+          done
+          # FlashStorage ships no licence file; its sources carry the LGPL-2.1+ header.
+          head -n 20 firmware/.pio/libdeps/qtpy_m0/FlashStorage/src/FlashStorage.h \
+            > "$lic/third-party-licenses/FlashStorage-license-header.txt"
+          pkgs=~/.platformio/packages
+          cp "$pkgs/framework-arduino-samd-adafruit/libraries/Adafruit_TinyUSB_Arduino/LICENSE" \
+             "$lic/third-party-licenses/Adafruit_TinyUSB_Arduino-LICENSE"
+          head -n 20 "$pkgs/framework-arduino-samd-adafruit/cores/arduino/wiring.c" \
+            > "$lic/third-party-licenses/Adafruit_SAMD_core-license-header.txt"
+          cp "$pkgs/framework-cmsis/LICENSE.txt" "$lic/third-party-licenses/CMSIS-LICENSE.txt"
+          head -n 40 "$pkgs/framework-cmsis-atmel/CMSIS/Device/ATMEL/samd21/include/samd21.h" \
+            > "$lic/third-party-licenses/CMSIS-Atmel-license-header.txt"
+          # Full texts referenced by the headers above (LGPL-2.1, GPL-3.0 for
+          # LGPL-3.0, Apache-2.0).
+          cp tools/license-texts/*.txt "$lic/third-party-licenses/"
+          cp LICENSE NOTICE "$lic/"
+
+          (cd licenses && zip -qr "../dist/cctrack-${tag}-licenses.zip" "cctrack-${tag}-licenses")
+          (cd dist && sha256sum ./*.uf2 ./*.zip > SHA256SUMS)
+          ls -l dist
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "CCTrack $GITHUB_REF_NAME" \
+            --generate-notes \
+            dist/*

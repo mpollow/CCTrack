@@ -1,0 +1,8 @@
+{
+    "name": "midi_mapper",
+    "version": "0.1.0",
+    "dependencies": [
+        { "name": "config_schema" },
+        { "name": "quat_math" }
+    ]
+}

@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Martin Pollow
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cctrack"
+version = "0.1.0"
+description = "Host-side consumer library for the CCTrack USB head-tracker (quaternion / yaw-pitch-roll stream)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Martin Pollow" }]
+keywords = ["head-tracker", "imu", "quaternion", "serial", "cobs", "midi"]
+dependencies = ["pyserial>=3.5"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/mpollow/CCTrack"
+Documentation = "https://github.com/mpollow/CCTrack/blob/main/docs/protocol.md"
+
+[tool.setuptools]
+packages = ["cctrack"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

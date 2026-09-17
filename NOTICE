@@ -1,0 +1,44 @@
+CCTrack
+Copyright (c) 2026 Martin Pollow
+
+CCTrack's own code is MIT-licensed (LICENSE), its documentation CC BY 4.0
+(LICENSE-CC-BY-4.0), and its hardware design (docs/hardware.md)
+CERN-OHL-P v2 (LICENSE-CERN-OHL-P-v2).
+
+Third-party components compiled into the firmware binary (firmware.uf2)
+-----------------------------------------------------------------------
+Exact versions are pinned in firmware/platformio.ini.
+
+  - Adafruit SAMD Arduino core (framework-arduino-samd-adafruit)
+                                        LGPL-2.1-or-later
+  - Adafruit TinyUSB for Arduino (bundled with the core)
+                                        MIT
+  - Adafruit BNO08x                     BSD-3-Clause
+      including the CEVA SH-2 driver (sh2*.c, shtp.c)
+                                        Apache-2.0 (see its NOTICE.txt)
+  - Adafruit BusIO                      MIT
+  - Adafruit Unified Sensor             Apache-2.0
+  - Adafruit NeoPixel                   LGPL-3.0-or-later
+  - cmaglie/FlashStorage                LGPL-2.1-or-later
+  - CMSIS (Arm)                         Apache-2.0
+  - CMSIS-Atmel (Microchip)             BSD-2-Clause
+  - GCC runtime (libgcc) and newlib C library, from the Arm GNU toolchain
+                                        GPL-3.0 with the GCC Runtime Library
+                                        Exception / BSD-style newlib licences
+
+Release archives include the licence texts of these components in
+third-party-licenses/.
+
+LGPL components: each released firmware binary is built from the git tag of
+the same name. The complete corresponding source is this repository at that
+tag; `pio run` in firmware/ rebuilds the binary, so you can
+modify or replace the LGPL libraries and relink.
+
+Build and test tools (not part of the firmware binary)
+------------------------------------------------------
+  - Unity (Throw The Switch), unit tests  MIT
+  - PlatformIO Core                       Apache-2.0
+  - microsoft/uf2 (uf2conv.py, uf2families.json), vendored verbatim in
+    tools/                                MIT
+  - pyserial, runtime dependency of python/ and tools/
+                                          BSD-3-Clause
