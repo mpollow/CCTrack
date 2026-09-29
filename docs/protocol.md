@@ -15,7 +15,7 @@ points for everything below: `firmware/src/usb_descriptors.cpp`,
 | **USB-MIDI** (class-compliant, one cable) | MCU → host | Head orientation as MIDI CC, parameterised by config |
 | **USB-CDC** (virtual COM, e.g. `/dev/ttyACM0`) | bidirectional | COBS-framed binary protocol: quaternion stream, status events, host commands |
 
-USB IDs: VID `0x1209`, PID `0xCC3D` ([pid.codes](https://pid.codes), allocation pending). Product name and MIDI port name are
+USB IDs: VID `0x1209`, PID `0xCC3D` (allocated via [pid.codes](https://pid.codes/1209/CC3D/)). Product name and MIDI port name are
 derived from `Config.device_name` (or auto-generated `CCTrack #XXXX` when
 the name field is empty).
 

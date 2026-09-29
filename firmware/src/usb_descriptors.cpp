@@ -5,8 +5,8 @@
 #include <Adafruit_TinyUSB.h>
 #include "fw_version.h"
 
-// pid.codes open-source VID; PID 0xCC3D reserved for CCTrack via pid.codes
-// (allocation pending, see README).
+// pid.codes open-source VID; PID 0xCC3D allocated to CCTrack
+// (https://pid.codes/1209/CC3D/).
 static constexpr uint16_t CCTRACK_USB_VID = 0x1209;
 static constexpr uint16_t CCTRACK_USB_PID = 0xCC3D;
 

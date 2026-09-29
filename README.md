@@ -152,8 +152,8 @@ Per-file SPDX headers identify each file's licence. The firmware binary
 also contains third-party libraries, some under the LGPL (Arduino core,
 NeoPixel, FlashStorage); [`NOTICE`](NOTICE) lists them all.
 
-USB identity: VID `0x1209`, PID `0xCC3D` ([pid.codes](https://pid.codes),
-allocation pending).
+USB identity: VID `0x1209`, PID `0xCC3D`, allocated via
+[pid.codes](https://pid.codes/1209/CC3D/).
 
 ## Contributing
 
