@@ -12,6 +12,13 @@ once, no drivers on any OS:
 - **USB-CDC** (virtual COM port): a ~400 Hz stream of COBS-framed,
   CRC-checked quaternions plus a binary command channel for configuration.
 
+Website, live in-browser demo and build guide: **[cctrack.org](https://cctrack.org)**
+
+<a href="https://cctrack.org/#video"><img src="https://cctrack.org/img/CCTrack_quick-overview-poster.jpg" width="640" alt="CCTrack quick overview video (1:45): a CCTrack on headphones driving the live demo on cctrack.org"></a>
+
+▶ [Watch the 1:45 quick overview](https://cctrack.org/#video) — what it does,
+how it goes together, flashing and mounting.
+
 ## Quick start
 
 **Hardware:** an Adafruit QT Py SAMD21 and an Adafruit BNO085 breakout,
