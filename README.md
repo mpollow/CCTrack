@@ -37,10 +37,15 @@ settings to factory defaults** — re-apply your preset afterwards.
 CC 16/17/18 (channel 1) out of the box. Map them in your DAW like any
 controller.
 
-The device re-zeroes on power-up, so plug it in facing
-forward. To re-zero later, run `tools/cctrack-cmd.py <port> rezero` (or
-replug, or press the optional button on `A1`; the QT Py's on-board button
-is reset, not re-zero).
+The device re-zeroes on power-up, so plug it in facing forward. To
+re-zero later, face forward and either:
+
+- **Fast** (instant, no restart): run `tools/cctrack-cmd.py <port> rezero`,
+  or press the optional button between `A1` and `GND`.
+- **Slow** (the board restarts, which takes a few seconds): replug, or press
+  the QT Py's on-board **RESET** button once. RESET currently hangs about
+  one press in three (LED off, no data) and then needs a power cycle; see
+  [#2](https://github.com/mpollow/CCTrack/issues/2).
 
 *Example application:* head-tracked binaural rendering with
 [IEM SceneRotator](https://plugins.iem.at/docs/plugindescriptions/#scenerotator)

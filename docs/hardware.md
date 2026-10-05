@@ -81,8 +81,18 @@ I²C path.
   `firmware/src/main.cpp`), so an unconnected pin simply reads "not
   pressed" and no external components are needed.
 - The QT Py's own on-board button is **RESET**, not a user button: it
-  reboots the board (which also re-zeroes), and a quick double press
-  enters the UF2 bootloader.
+  reboots the board, and a quick double press enters the UF2 bootloader.
+  A single press therefore also re-zeroes (via the `g_pending_rezero` set
+  in `setup()`), but it takes as long as a replug: USB re-enumeration plus
+  BNO085 initialisation.
+- **Known issue:** a RESET press restarts only the SAMD21, while the
+  BNO085 stays powered. About one press in three, the firmware hangs in
+  `setup()` after USB enumeration: LED off, no data, and the CDC port no
+  longer answers. Only a power cycle recovers it. The suspected cause is
+  an I²C transfer interrupted mid-byte that leaves the bus stuck, with the
+  SAMD core's I²C wait loops having no timeout. This is not confirmed yet;
+  see [#2](https://github.com/mpollow/CCTrack/issues/2). Until it's fixed,
+  re-zero with the `rezero` command, the `A1` button, or a replug.
 
 ## Orientation
 
